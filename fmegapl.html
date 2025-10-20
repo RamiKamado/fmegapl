@@ -414,7 +414,9 @@ Z3,R U' R U R U' R' U' R U R U2 R U' R U' R2' U' R2' ;`;
                 const finalScr = [preRot, baseScr, postRot].filter(x => x).join(' ');
                 
                 if (curr) {
-                    setPrev(cases.find(c => c.name === curr.name) || curr);
+                    const prevCase = cases.find(c => c.name === curr.name) || curr;
+                    prevCase.imagePath = getImageUrl(prevCase.name);
+                    setPrev(prevCase);
                 }
                 // 画像パスを追加
                 sel.imagePath = getImageUrl(sel.name);
@@ -490,7 +492,15 @@ Z3,R U' R U R U' R' U' R U R U2 R U' R U' R2' U' R2' ;`;
                                 getSorted().map(c => {
                                     const st = getSt(c.times);
                                     return React.createElement('div', { key: c.id, className: 'bg-gray-50 rounded-lg p-4' },
-                                        React.createElement('div', { className: 'font-semibold text-gray-800 mb-2 text-lg' }, c.name),
+                                        React.createElement('div', { className: 'flex items-center gap-3 mb-2' },
+                                            React.createElement('img', {
+                                                src: getImageUrl(c.name),
+                                                alt: c.name,
+                                                className: 'w-8 h-8 object-contain rounded border border-gray-200',
+                                                onError: (e) => { e.target.style.display = 'none'; }
+                                            }),
+                                            React.createElement('div', { className: 'font-semibold text-gray-800 text-lg' }, c.name)
+                                        ),
                                         React.createElement('div', { className: 'grid grid-cols-3 gap-4 text-sm mb-3' },
                                             React.createElement('div', null,
                                                 React.createElement('span', { className: 'text-gray-600' }, 'ベスト: '),
@@ -559,8 +569,8 @@ Z3,R U' R U R U' R' U' R U R U2 R U' R U' R2' U' R2' ;`;
                             prev && React.createElement('div', { className: 'bg-white rounded-2xl shadow-xl p-6' },
                                 React.createElement('div', { className: 'flex items-center justify-between mb-4' },
                                     React.createElement('div', { className: 'flex items-center gap-4' },
-                                        prev.imagePath && React.createElement('img', {
-                                            src: prev.imagePath,
+                                        React.createElement('img', {
+                                            src: getImageUrl(prev.name),
                                             alt: prev.name,
                                             className: 'w-8 h-8 object-contain rounded border border-gray-200',
                                             onError: (e) => { e.target.style.display = 'none'; }
@@ -781,7 +791,7 @@ Z3,R U' R U R U' R' U' R U R U2 R U' R U' R2' U' R2' ;`;
                                     className: 'flex items-center justify-between bg-gray-50 p-4 rounded-lg hover:bg-gray-100'
                                 },
                                     React.createElement('div', { className: 'flex items-center gap-4 flex-1' },
-                                        (c.image || getImageUrl(c.name)) && React.createElement('img', {
+                                        React.createElement('img', {
                                             src: c.image || getImageUrl(c.name),
                                             alt: c.name,
                                             className: 'w-8 h-8 object-contain rounded border border-gray-200',
